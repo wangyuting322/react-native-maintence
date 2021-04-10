@@ -6,8 +6,8 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, ScrollView, Alert} from 'react-native';
 import {
   View,
   List,
@@ -19,9 +19,15 @@ import {
   Input,
 } from 'native-base';
 // 图片上传
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker, {
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 
 function AddMaintenance({route, navigation}) {
+  // 图片信息
+  let [image, setImage] = useState();
+
   let inputData = [
     {
       title: '维保信息',
@@ -109,7 +115,31 @@ function AddMaintenance({route, navigation}) {
    * 选择图片
    */
   function selectPicture() {
-    console.log(35);
+    Alert.alert(
+      '',
+      '请选择方式',
+      [
+        {
+          text: '相机拍摄',
+          onPress: () => {
+            launchCamera({}, e => {
+              console.log(e);
+              setImage(e);
+            });
+          },
+        },
+        {
+          text: '相册选取',
+          onPress: () => {
+            launchImageLibrary({quality: 0.5}, e => {
+              console.log(e);
+              setImage(e);
+            });
+          },
+        },
+      ],
+      {cancelable: true},
+    );
   }
   /**
    * 渲染内容中的单个项
