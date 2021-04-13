@@ -6,8 +6,8 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, ScrollView, TouchableHighlight} from 'react-native';
 import {
   View,
   List,
@@ -17,10 +17,12 @@ import {
   Right,
   Button,
   Input,
+  // Picker,
 } from 'native-base';
+import Picker from 'react-native-picker';
+import Select from '../../components/Select.js';
 
 function AddFixedAssets({route, navigation}) {
-  console.log(route, navigation);
   let inputData = [
     {
       title: '基本信息',
@@ -34,9 +36,38 @@ function AddFixedAssets({route, navigation}) {
         },
         {
           title: '资产分类',
-          field: 'state',
+          field: 'type',
           value: null,
           required: true,
+          renderType: 'select',
+          selectOptions: [
+            {label: '分类一fsdfsdffdsff456414635434sdfds', value: '0'},
+            {
+              label: '分类二gvgcvcccccccccccccccccccccccccccccccccccccccc',
+              value: '1',
+            },
+            {
+              label: '分类二gvgcvcccccccccccccccccccccccccccccccccccccccc',
+              value: '3',
+            },
+            {
+              label: '分类二gvgcvcccccccccccccccccccccccccccccccccccccccc',
+              value: '4',
+            },
+            {
+              label: '分类二gvgcvcccccccccccccccccccccccccccccccccccccccc',
+              value: '5',
+            },
+            {
+              label: '分类二gvgcvcccccccccccccccccccccccccccccccccccccccc',
+              value: '6',
+            },
+            {
+              label: '分类二gvgcvcccccccccccccccccccccccccccccccccccccccc',
+              value: '7',
+            },
+          ],
+          mode: 'single',
         },
         {
           title: '资产状态',
@@ -74,20 +105,13 @@ function AddFixedAssets({route, navigation}) {
     },
   ];
 
-  // let baseInfo = {
-  //   name: '',
-  //   type: '',
-  //   state: '',
-  //   specification: '',
-  //   sequence: '',
-  //   supplier: '',
-  //   brand: '',
-  //   source: '',
-  // };
+  // 使用state保证视图的更新
+  let [DATA, setDATA] = useState(inputData);
+
   /**
-   * 填写资产事件
+   * input 填写事件/select 选择事件
    */
-  function changeText(value, objField, dataField) {
+  function changeField(value, objField, dataField) {
     inputData = inputData.map(item => {
       if (item.field === objField) {
         item.data = item.data.map(it => {
@@ -99,8 +123,8 @@ function AddFixedAssets({route, navigation}) {
       }
       return item;
     });
+    setDATA(inputData);
   }
-
   /**
    * 提交事件
    */
@@ -119,15 +143,14 @@ function AddFixedAssets({route, navigation}) {
         allData[field] = value;
       }
     }
-    console.log(allData);
     if (isApproved) {
+      console.log(allData);
       // 返回上一页面
       // navigation.goBack();
       // 返回首页
       navigation.replace('Home', {initialRouteName: 'FixedAssets'});
     }
   }
-
   /**
    * 渲染内容中的单个项
    */
@@ -136,7 +159,7 @@ function AddFixedAssets({route, navigation}) {
       return (
         <ListItem style={styles.contentItem}>
           <Left style={styles.contentItemLeft}>
-            <Text>
+            <Text style={{fontSize: 14}}>
               {item.required ? (
                 <Text style={{color: 'red', margin: 0, padding: 0}}>*</Text>
               ) : null}
@@ -144,19 +167,25 @@ function AddFixedAssets({route, navigation}) {
             </Text>
           </Left>
           <Right style={styles.contentItemRight}>
-            <Input
-              style={{
-                height: 30,
-                borderColor: 'transparent',
-                borderWidth: 1,
-                width: '50%',
-                padding: 0,
-              }}
-              textAlign="right"
-              placeholder="未填写"
-              onChangeText={$event =>
-                changeText($event, field, item.field)
-              }></Input>
+            {item.renderType ? (
+              item.renderType === 'select' ? (
+                <Select
+                  onChecked={e => {
+                    changeField(e, field, item.field);
+                  }}
+                  value={item.value || []}
+                  type={item.mode}
+                  options={item.selectOptions}></Select>
+              ) : null
+            ) : (
+              <Input
+                style={styles.input}
+                textAlign="right"
+                placeholder="未填写"
+                onChangeText={$event =>
+                  changeField($event, field, item.field)
+                }></Input>
+            )}
           </Right>
         </ListItem>
       );
@@ -166,7 +195,7 @@ function AddFixedAssets({route, navigation}) {
   return (
     <ScrollView>
       <List>
-        {inputData.map(({title, field, data}, index) => {
+        {DATA.map(({title, field, data}, index) => {
           return (
             <View>
               <ListItem key={`${title}-${index}`} style={{marginLeft: 0}}>
@@ -189,13 +218,14 @@ function AddFixedAssets({route, navigation}) {
 
 const styles = StyleSheet.create({
   title: {
-    backgroundColor: '#F1F3F4',
+    backgroundColor: '#F2F2F2',
     width: '100%',
     flexDirection: 'row',
   },
   before: {
     flexBasis: 5,
     flexGrow: 0,
+    marginRight: 10,
     backgroundColor: '#3F51B5',
   },
   contentItem: {
@@ -208,6 +238,13 @@ const styles = StyleSheet.create({
   },
   contentItemRight: {
     flexGrow: 1,
+  },
+  input: {
+    height: 30,
+    borderColor: 'transparent',
+    borderWidth: 1,
+    padding: 0,
+    fontSize: 14,
   },
   view: {
     marginTop: 30,

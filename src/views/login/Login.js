@@ -87,7 +87,12 @@ function Login({route, navigation}) {
                 onChangeText={changePassword}></Input>
             </Item>
           </Form>
-          <Button full iconLeft onPress={handleLogin} style={{marginTop: 30}}>
+          <Button
+            full
+            iconLeft
+            primary
+            onPress={handleLogin}
+            style={{marginTop: 30}}>
             <Icon name="paper-plane" />
             <Text>登录</Text>
           </Button>

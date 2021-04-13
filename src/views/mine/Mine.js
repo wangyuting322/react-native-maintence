@@ -97,7 +97,7 @@ function Mine({route, navigation}) {
             ></Icon>
           </Left>
           <Body>
-            <Text>{title}</Text>
+            <Text style={{fontSize: 16}}>{title}</Text>
           </Body>
           <Right>
             <Icon name="chevron-right" type="FontAwesome"></Icon>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   leftIcon: {
-    fontSize: 18,
+    fontSize: 16,
     // color: 'grey',
   },
 });

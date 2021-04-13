@@ -56,7 +56,12 @@ function Home({route, navigation}) {
    */
   function renderTabBarLabel({focused, color, size}, label) {
     return (
-      <Text style={focused ? styles.activeColor : styles.normalColor}>
+      <Text
+        style={
+          focused
+            ? {...styles.activeColor, fontSize: 14}
+            : {...styles.normalColor, fontSize: 14}
+        }>
         {label}
       </Text>
     );
@@ -69,7 +74,12 @@ function Home({route, navigation}) {
     return (
       <Icon
         name={icon}
-        style={focused ? styles.activeColor : styles.normalColor}
+        style={{fontSzie: 16}}
+        style={
+          focused
+            ? {...styles.activeColor, fontSize: 24}
+            : {...styles.normalColor, fontSize: 24}
+        }
         type="FontAwesome"></Icon>
     );
   }
@@ -81,9 +91,10 @@ function Home({route, navigation}) {
         style={styles.wrapper}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
       <Tab.Navigator initialRouteName={route.initialRouteName}>
-        {allTabNavigations.map(item => {
+        {allTabNavigations.map((item, index) => {
           return (
             <Tab.Screen
+              key={`${item.name}-${index}`}
               name={item.name}
               options={item.options}
               component={item.component}

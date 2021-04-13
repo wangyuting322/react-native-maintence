@@ -7,7 +7,14 @@
  */
 
 import React, {useState} from 'react';
-import {StyleSheet, ScrollView, Alert} from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  Alert,
+  Image,
+  Modal,
+  TouchableHighlight,
+} from 'react-native';
 import {
   View,
   List,
@@ -23,10 +30,18 @@ import ImagePicker, {
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
+// 图片放大查看
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 function AddMaintenance({route, navigation}) {
+  // 多图片信息
+  let [imageArr, setImageArr] = useState([]);
   // 图片信息
-  let [image, setImage] = useState();
+  let [imageInfo, setImageInfo] = useState(null);
+  // 是否放大图片
+  let [isBig, setIsBig] = useState(false);
+  // 放大图片的索引
+  let [initIndex, setInitIndex] = useState(0);
 
   let inputData = [
     {
@@ -68,8 +83,10 @@ function AddMaintenance({route, navigation}) {
     },
   ];
 
+  // 使用state保证视图的更新
+  let [DATA, setDATA] = useState(inputData);
   /**
-   * 填写资产事件
+   * input填写
    */
   function changeText(value, objField, dataField) {
     inputData = inputData.map(item => {
@@ -83,6 +100,7 @@ function AddMaintenance({route, navigation}) {
       }
       return item;
     });
+    setDATA(inputData);
   }
 
   /**
@@ -100,10 +118,15 @@ function AddMaintenance({route, navigation}) {
           isApproved = false;
           break;
         }
-        allData[field] = value;
+        if (field === 'image') {
+          allData[field] = imageArr;
+        } else {
+          allData[field] = value;
+        }
       }
     }
     if (isApproved) {
+      console.log(allData);
       // 返回上一页面
       // navigation.goBack();
       // 返回首页
@@ -122,18 +145,32 @@ function AddMaintenance({route, navigation}) {
         {
           text: '相机拍摄',
           onPress: () => {
-            launchCamera({}, e => {
-              console.log(e);
-              setImage(e);
+            launchCamera({saveToPhotos: true}, response => {
+              if (response.didCancel) {
+                console.log('用户点击了取消');
+              } else if (response.error) {
+                console.log('ImagePicker 出错: ', response.error);
+              } else {
+                let arr = [...imageArr, response];
+                setImageArr(arr);
+                console.log(imageArr);
+              }
             });
           },
         },
         {
           text: '相册选取',
           onPress: () => {
-            launchImageLibrary({quality: 0.5}, e => {
-              console.log(e);
-              setImage(e);
+            launchImageLibrary({quality: 0.5}, response => {
+              if (response.didCancel) {
+                console.log('用户点击了取消');
+              } else if (response.error) {
+                console.log('ImagePicker 出错: ', response.error);
+              } else {
+                let arr = [...imageArr, response];
+                setImageArr(arr);
+                console.log(imageArr);
+              }
             });
           },
         },
@@ -142,14 +179,63 @@ function AddMaintenance({route, navigation}) {
     );
   }
   /**
+   * 删除图片
+   */
+  function deleteImage(index) {
+    let arr = [...imageArr];
+    arr.splice(index, 1);
+    setImageArr(arr);
+  }
+  /**
+   * 是否放大
+   */
+  function handleBig(isBig, index = 0) {
+    setIsBig(isBig);
+    setInitIndex(index);
+  }
+  /**
+   * 渲染图片
+   */
+  function renderUploadImage() {
+    return (
+      <View style={styles.imgWrapper}>
+        {imageArr.map((item, index) => {
+          return (
+            <View style={styles.showImageView}>
+              <Text
+                style={styles.showImageX}
+                onPress={() => deleteImage(index)}>
+                X
+              </Text>
+              <TouchableHighlight
+                activeOpacity={1}
+                underlayColor="#DDDDDD"
+                onPress={() => handleBig(true, index)}>
+                <Image
+                  source={{
+                    uri: item.uri,
+                  }}
+                  style={styles.showImageImage}></Image>
+              </TouchableHighlight>
+            </View>
+          );
+        })}
+        <Text onPress={selectPicture} style={styles.upload}>
+          +
+        </Text>
+      </View>
+    );
+  }
+  /**
    * 渲染内容中的单个项
    */
   function renderContent(field, data) {
+    let uri = imageInfo && imageInfo.uri;
     return data.map((item, index) => {
       return (
         <ListItem style={styles.contentItem}>
           <Left style={styles.contentItemLeft}>
-            <Text>
+            <Text style={{fontSize: 14}}>
               {item.required ? (
                 <Text style={{color: 'red', margin: 0, padding: 0}}>*</Text>
               ) : null}
@@ -159,26 +245,11 @@ function AddMaintenance({route, navigation}) {
           <Right style={styles.contentItemRight}>
             {item.renderType ? (
               item.renderType === 'image' ? (
-                <Text
-                  onPress={selectPicture}
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'black',
-                    padding: 30,
-                    fontSize: 26,
-                  }}>
-                  +
-                </Text>
+                renderUploadImage()
               ) : null
             ) : (
               <Input
-                style={{
-                  height: 30,
-                  borderColor: 'transparent',
-                  borderWidth: 1,
-                  width: '50%',
-                  padding: 0,
-                }}
+                style={styles.input}
                 textAlign="right"
                 placeholder="未填写"
                 onChangeText={$event =>
@@ -191,10 +262,33 @@ function AddMaintenance({route, navigation}) {
     });
   }
 
+  let arr = imageArr.map(item => {
+    return {url: item.uri};
+  });
+
   return (
     <ScrollView>
+      {/**图片放大查看 */}
+      <Modal
+        animationType="fade"
+        presentationStyle={'overFullScreen'}
+        transparent={true}
+        visible={isBig}
+        onRequestClose={() => {
+          setIsBig(false);
+        }}>
+        <ImageViewer
+          imageUrls={arr}
+          style={{width: '100%'}}
+          index={initIndex}
+          enableImageZoom={true} // 是否开启手势缩放
+          saveToLocalByLongPress={true} //是否开启长按保存
+          menuContext={{saveToLocal: '保存图片', cancel: '取消'}}
+        />
+      </Modal>
+      {/**列表填写 */}
       <List>
-        {inputData.map(({title, field, data}, index) => {
+        {DATA.map(({title, field, data}, index) => {
           return (
             <View>
               <ListItem key={`${title}-${index}`} style={{marginLeft: 0}}>
@@ -217,13 +311,14 @@ function AddMaintenance({route, navigation}) {
 
 const styles = StyleSheet.create({
   title: {
-    backgroundColor: '#F1F3F4',
+    backgroundColor: '#F2F2F2',
     width: '100%',
     flexDirection: 'row',
   },
   before: {
     flexBasis: 5,
     flexGrow: 0,
+    marginRight: 10,
     backgroundColor: '#3F51B5',
   },
   contentItem: {
@@ -237,10 +332,54 @@ const styles = StyleSheet.create({
   contentItemRight: {
     flexGrow: 1,
   },
+  input: {
+    height: 30,
+    borderColor: 'transparent',
+    borderWidth: 1,
+    padding: 0,
+    fontSize: 14,
+  },
   view: {
     marginTop: 30,
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  imgWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  showImageView: {
+    position: 'relative',
+    padding: 3,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  showImageX: {
+    textAlign: 'center',
+    borderRadius: 10,
+    overflow: 'hidden',
+    width: 20,
+    height: 20,
+    lineHeight: 20,
+    position: 'absolute',
+    right: 0,
+    zIndex: 99,
+    backgroundColor: 'black',
+    color: 'white',
+  },
+  showImageImage: {
+    width: 50,
+    height: 50,
+  },
+  upload: {
+    borderWidth: 1,
+    borderColor: 'black',
+    height: 50,
+    width: 50,
+    lineHeight: 50,
+    fontSize: 24,
+    textAlign: 'center',
+    margin: 3,
   },
 });
 export default AddMaintenance;

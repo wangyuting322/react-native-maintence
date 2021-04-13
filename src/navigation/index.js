@@ -111,9 +111,10 @@ function Navigation(args) {
         navigator = navigatorRef;
       }}>
       <Stack.Navigator initialRouteName="Login">
-        {allStackNavigations.map(item => {
+        {allStackNavigations.map((item, index) => {
           return (
             <Stack.Screen
+              key={`${item.name}-${index}`}
               name={item.name}
               options={item.options}
               component={item.component}
