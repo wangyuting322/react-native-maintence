@@ -1,4 +1,11 @@
 import React, {useState} from 'react';
+// 全局样式
+import {
+  globalColor,
+  globalSize,
+  globalFlexStyle,
+} from '../assets/styles/Global';
+// 组件
 import {StyleSheet} from 'react-native';
 import {View, Text} from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -65,7 +72,7 @@ export default function CustomDateTime(props) {
 }
 const styles = StyleSheet.create({
   textStyle: {
-    fontSize: 14,
+    ...globalSize.textSize,
     marginRight: 5,
     textAlign: 'right',
   },

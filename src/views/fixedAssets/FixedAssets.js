@@ -11,7 +11,13 @@ import {StyleSheet, TouchableHighlight, ScrollView} from 'react-native';
 import {navigate} from '../../navigation/index';
 import {View, List, ListItem, Text, Icon} from 'native-base';
 
-function FixedAssets() {
+import {
+  globalColor,
+  globalSize,
+  globalFlexStyle,
+} from '../../assets/styles/Global';
+
+function FixedAssets({navigation}) {
   const DATA = [
     {
       title: '资产',
@@ -19,16 +25,17 @@ function FixedAssets() {
         {
           icon: 'shopping-cart',
           title: '入库',
-          link: 'addFixedAssets',
+          link: 'AddFixedAssets',
         },
         {
           icon: 'barcode',
           title: '识别',
-          link: 'scanFixedAssets',
+          link: 'ScanFixedAssets',
         },
         {
           icon: 'edit',
           title: '盘点',
+          link: 'AssetsCheck',
         },
         {
           icon: 'search',
@@ -49,7 +56,7 @@ function FixedAssets() {
         {
           icon: 'tint',
           title: '申请',
-          link: 'addMaintenance',
+          link: 'AddMaintenance',
         },
         {
           icon: 'trash',
@@ -134,7 +141,7 @@ function FixedAssets() {
    */
   function handleLink({link}) {
     if (link) {
-      navigate(link);
+      navigation.navigate(link);
     }
   }
 
@@ -148,7 +155,7 @@ function FixedAssets() {
           return (
             <TouchableHighlight
               style={styles.contentItem}
-              underlayColor="#F1F3F4"
+              underlayColor={globalColor.shadowColor.backgroundColor}
               onPress={() => handleLink(item)}>
               <View style={styles.contentItemView}>
                 <Icon
@@ -167,16 +174,16 @@ function FixedAssets() {
   return (
     <ScrollView>
       <List>
-        {DATA.map((item, index) => {
+        {DATA.map(({title, data}, index) => {
           return (
             <View>
-              <ListItem key={`${item.title}-${index}`}>
+              <ListItem key={`${title}-${index}`}>
                 <View style={styles.title}>
                   <View style={styles.before}></View>
-                  <Text>{item.title}</Text>
+                  <Text style={styles.titleText}>{title}</Text>
                 </View>
               </ListItem>
-              {item.data ? renderContentItem(item.data) : null}
+              {data ? renderContentItem(data) : null}
             </View>
           );
         })}
@@ -186,39 +193,34 @@ function FixedAssets() {
 }
 const styles = StyleSheet.create({
   title: {
-    backgroundColor: '#F2F2F2',
-    width: '100%',
-    flexDirection: 'row',
+    ...globalFlexStyle.rowFlex,
   },
   before: {
+    ...globalColor.themeBackgroundColor,
     flexBasis: 5,
     flexGrow: 0,
     marginRight: 10,
-    backgroundColor: '#3F51B5',
+  },
+  titleText: {
+    ...globalSize.titleSize,
   },
   content: {
-    padding: 5,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
+    ...globalFlexStyle.rowFlex,
   },
   contentItem: {
     width: '33%',
-    paddingTop: 10,
-    paddingBottom: 10,
+    padding: 10,
   },
   contentItemView: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...globalFlexStyle.columnFlex,
   },
   contentItemIcon: {
-    fontSize: 18,
-    color: 'grey',
+    ...globalSize.iconSize,
+    ...globalColor.greyColor,
   },
   contentItemText: {
-    fontSize: 14,
-    color: 'grey',
+    ...globalSize.textSize,
+    ...globalColor.greyColor,
   },
 });
 export default FixedAssets;

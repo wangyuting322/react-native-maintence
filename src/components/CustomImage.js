@@ -1,4 +1,11 @@
 import React, {useState} from 'react';
+// 全局样式
+import {
+  globalColor,
+  globalSize,
+  globalFlexStyle,
+} from '../assets/styles/Global';
+// 组件
 import {
   StyleSheet,
   Alert,
@@ -132,7 +139,7 @@ export default function CustomImage(props) {
               </Text>
               <TouchableHighlight
                 activeOpacity={1}
-                underlayColor="#DDDDDD"
+                underlayColor={globalColor.shadowColor.backgroundColor}
                 onPress={() => handleBig(true, index)}>
                 <Image
                   source={{
@@ -152,13 +159,11 @@ export default function CustomImage(props) {
 }
 const styles = StyleSheet.create({
   imageWrapper: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    ...globalFlexStyle.rowFlex,
   },
   imageView: {
+    ...globalFlexStyle.rowFlex,
     position: 'relative',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     padding: 3,
   },
   deleteImage: {
@@ -179,12 +184,12 @@ const styles = StyleSheet.create({
     height: 50,
   },
   uploadImage: {
+    ...globalSize.largeSize,
     borderWidth: 1,
     borderColor: 'black',
     height: 50,
     width: 50,
     lineHeight: 50,
-    fontSize: 24,
     textAlign: 'center',
     margin: 3,
   },

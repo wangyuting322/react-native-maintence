@@ -22,7 +22,7 @@ function Mine({route, navigation}) {
         {
           title: '我的资产',
           icon: 'hdd-o',
-          link: 'myAssets',
+          link: 'MyAssets',
         },
         {
           title: '我的报修',

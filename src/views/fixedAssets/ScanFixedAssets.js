@@ -7,9 +7,25 @@
  */
 
 import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, Vibration, Alert} from 'react-native';
+// 全局样式
+import {
+  globalColor,
+  globalSize,
+  globalFlexStyle,
+} from '../../assets/styles/Global.js';
+// 组件
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Vibration,
+  Alert,
+  Modal,
+} from 'react-native';
 // import {navigate} from '../../navigation/index';
-import {Text, View, Image} from 'native-base';
+import {Text, View, Button} from 'native-base';
+// 图片放大查看
+import ImageViewer from 'react-native-image-zoom-viewer';
 /**
 https://github.com/react-native-camera/react-native-camera/blob/master/docs/RNCamera.md
 */
@@ -24,6 +40,8 @@ function ScanFixedAssets({route, navigation}) {
   let [cameraType, setCameraType] = useState(RNCamera.Constants.Type.back);
   // 图片路径
   let [imagePath, setImagePath] = useState();
+  // 是否放大图片
+  let [isBig, setIsBig] = useState(false);
 
   /**
    * 二维码扫描
@@ -85,59 +103,87 @@ function ScanFixedAssets({route, navigation}) {
         : RNCamera.Constants.Type.back, // 1
     );
   }
+  /**
+   * 是否放大
+   */
+  function handleBig(isBig) {
+    setIsBig(isBig);
+  }
 
   return (
     <View style={styles.wrapper}>
-      <RNCamera
-        ref={ref => {
-          setCamera(ref);
-        }}
-        // captureTarget={RNCamera.constants.CaptureTarget.temp}
-        style={styles.cameraWrapepr}
-        type={cameraType}
-        googleVisionBarcodeType={
-          RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.QR_CODE
-        }
-        flashMode={RNCamera.Constants.FlashMode.auto}
-        onBarCodeRead={barcodeReceived}></RNCamera>
-      <View style={styles.controller}>
-        <TouchableOpacity onPress={takePicture} style={styles.capture}>
-          <Text style={{fontSize: 14}}> 拍照 </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={switchCamera} style={styles.capture}>
-          <Text style={{fontSize: 14}}> 转换摄像头 </Text>
-        </TouchableOpacity>
+      {/**图片放大查看 */}
+      <Modal
+        animationType="fade"
+        presentationStyle={'overFullScreen'}
+        transparent={true}
+        visible={isBig}
+        onRequestClose={() => {
+          setIsBig(false);
+        }}>
+        <ImageViewer
+          imageUrls={[
+            {
+              url: imagePath,
+            },
+          ]}
+          style={{width: '100%'}}
+          // index={initIndex}
+          enableImageZoom={true} // 是否开启手势缩放
+          saveToLocalByLongPress={true} //是否开启长按保存
+          menuContext={{saveToLocal: '保存图片', cancel: '取消'}}
+        />
+      </Modal>
+      <View style={styles.cameraWrapepr}>
+        {/**摄像头拍摄 */}
+        <RNCamera
+          ref={ref => {
+            setCamera(ref);
+          }}
+          // captureTarget={RNCamera.constants.CaptureTarget.temp}
+          style={styles.cameraWrapepr}
+          type={cameraType}
+          googleVisionBarcodeType={
+            RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.QR_CODE
+          }
+          flashMode={RNCamera.Constants.FlashMode.auto}
+          onBarCodeRead={barcodeReceived}></RNCamera>
       </View>
-      {/* <View style={styles.controller}>
-        <Image source={{imagePath}} style={{width: 100, height: 100}}></Image>
-      </View> */}
+      <View style={styles.controller}>
+        <Button onPress={takePicture}>
+          <Text style={{fontSize: 14}}> 拍照 </Text>
+        </Button>
+        <Button onPress={switchCamera}>
+          <Text style={{fontSize: 14}}> 转换摄像头 </Text>
+        </Button>
+      </View>
+      {imagePath ? (
+        <TouchableOpacity
+          onPress={() => {
+            handleBig(true);
+          }}>
+          <Image
+            source={{uri: imagePath}}
+            style={{width: 100, height: 100}}></Image>
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    flexDirection: 'column',
-    flex: 1,
+    ...globalFlexStyle.columnFlex,
+    flexGrow: 1,
   },
   cameraWrapepr: {
-    flex: 2,
-    flexBasis: 300,
+    flexGrow: 3,
     width: '100%',
   },
   controller: {
+    ...globalFlexStyle.rowFlex,
     flexGrow: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
+    justifyContent: 'space-between',
   },
 });
 export default ScanFixedAssets;

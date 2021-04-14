@@ -7,6 +7,13 @@
  */
 
 import React, {useState, useEffect} from 'react';
+// 全局样式
+import {
+  globalColor,
+  globalSize,
+  globalFlexStyle,
+} from '../../assets/styles/Global.js';
+// 组件
 import {StyleSheet} from 'react-native';
 import {
   Container,
@@ -71,16 +78,18 @@ function Login({route, navigation}) {
         <Content style={styles.content}>
           <Text style={styles.titleText}>欢迎登录管理系统</Text>
           <Form>
-            <Item floatingLabel>
-              <Label>账号</Label>
+            <Item style={styles.item}>
+              <Icon name="user" type="FontAwesome"></Icon>
               <Input
+                style={styles.input}
                 placeholder="请输入账号"
                 value={loginName}
                 onChangeText={changeLoginName}></Input>
             </Item>
-            <Item floatingLabel>
-              <Label>密码</Label>
+            <Item>
+              <Icon name="lock" type="FontAwesome"></Icon>
               <Input
+                style={styles.input}
                 placeholder="请输入密码"
                 value={password}
                 keyboardType="number-pad"
@@ -92,9 +101,9 @@ function Login({route, navigation}) {
             iconLeft
             primary
             onPress={handleLogin}
-            style={{marginTop: 30}}>
+            style={styles.button}>
             <Icon name="paper-plane" />
-            <Text>登录</Text>
+            <Text style={styles.buttonText}>登录</Text>
           </Button>
         </Content>
       </Container>
@@ -107,12 +116,25 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 0,
   },
+  item: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
   titleText: {
     fontSize: 26,
     fontWeight: 'bold',
     paddingTop: '30%',
     marginBottom: 20,
     textAlign: 'center',
+  },
+  input: {
+    ...globalSize.titleSize,
+  },
+  button: {
+    marginTop: 50,
+  },
+  buttonText: {
+    fontSize: 16,
   },
 });
 

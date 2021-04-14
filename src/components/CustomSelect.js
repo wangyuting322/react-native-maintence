@@ -1,4 +1,11 @@
 import React, {useState} from 'react';
+// 全局样式
+import {
+  globalColor,
+  globalSize,
+  globalFlexStyle,
+} from '../assets/styles/Global';
+// 组件
 import {StyleSheet, Modal, TouchableOpacity, ScrollView} from 'react-native';
 import {View, ListItem, Text, Left, Right, CheckBox, Radio} from 'native-base';
 
@@ -107,7 +114,7 @@ export default function CustomSelect(props) {
             showModal(false);
           }}>
           <View style={styles.modalView}>
-            <ScrollView style={{flexGrow: 0}}>
+            <ScrollView style={styles.scrollView}>
               {renderModalContent()}
             </ScrollView>
           </View>
@@ -126,31 +133,24 @@ export default function CustomSelect(props) {
 }
 const styles = StyleSheet.create({
   centeredView: {
+    ...globalFlexStyle.columnFlex,
+    ...globalColor.modalBackgroundColor,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   modalView: {
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 5,
-    alignItems: 'center',
     maxHeight: '70%',
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
-    // elevation: 5,
+  },
+  scrollView: {
+    flexGrow: 0,
   },
   leftText: {
-    fontSize: 14,
+    ...globalSize.textSize,
   },
   textStyle: {
-    fontSize: 14,
+    ...globalSize.textSize,
     marginRight: 5,
     textAlign: 'right',
   },

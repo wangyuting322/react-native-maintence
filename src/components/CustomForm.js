@@ -7,6 +7,13 @@
  */
 
 import React, {useState} from 'react';
+// 全局样式
+import {
+  globalColor,
+  globalSize,
+  globalFlexStyle,
+} from '../assets/styles/Global';
+// 组件
 import {StyleSheet, ScrollView} from 'react-native';
 import {
   View,
@@ -137,16 +144,16 @@ function CustomForm(props) {
   function renderContent(field, data) {
     return data.map((item, index) => {
       return (
-        <ListItem style={styles.contentItem}>
-          <Left style={styles.contentItemLeft}>
-            <Text style={{fontSize: 14}}>
+        <ListItem style={styles.contentListItem}>
+          <Left style={styles.left}>
+            <Text style={styles.leftText}>
               {item.required ? (
-                <Text style={{color: 'red', margin: 0, padding: 0}}>*</Text>
+                <Text style={styles.requiredText}>*</Text>
               ) : null}
               {item.title}
             </Text>
           </Left>
-          <Right style={styles.contentItemRight}>
+          <Right style={styles.right}>
             {item.renderType
               ? item.renderType === 'select'
                 ? renderSelect(field, item)
@@ -168,10 +175,10 @@ function CustomForm(props) {
         {DATA.map(({title, field, data}, index) => {
           return (
             <View>
-              <ListItem key={`${title}-${index}`} style={{marginLeft: 0}}>
+              <ListItem key={`${title}-${index}`} style={styles.headerListItem}>
                 <View style={styles.title}>
                   <View style={styles.before}></View>
-                  <Text>{title}</Text>
+                  <Text style={styles.titleText}>{title}</Text>
                 </View>
               </ListItem>
               {data ? renderContent(field, data) : null}
@@ -187,39 +194,41 @@ function CustomForm(props) {
 }
 
 const styles = StyleSheet.create({
+  headerListItem: {
+    marginLeft: 0,
+  },
   title: {
-    backgroundColor: '#F2F2F2',
-    width: '100%',
-    flexDirection: 'row',
+    ...globalFlexStyle.rowFlex,
   },
   before: {
+    ...globalColor.themeBackgroundColor,
     flexBasis: 5,
     flexGrow: 0,
     marginRight: 10,
-    backgroundColor: '#3F51B5',
   },
-  contentItem: {
+  titleText: {
+    ...globalSize.titleSize,
+  },
+  contentListItem: {
     marginLeft: 0,
     backgroundColor: 'white',
   },
-  contentItemLeft: {
-    flexBasis: '30%',
-    flexGrow: 0,
+  left: {
+    ...globalFlexStyle.left,
   },
-  contentItemRight: {
-    flexGrow: 1,
+  leftText: {
+    ...globalSize.textSize,
+  },
+  requiredText: {
+    color: 'red',
+  },
+  right: {
+    ...globalFlexStyle.right,
   },
   input: {
+    ...globalSize.textSize,
     height: 30,
-    borderColor: 'transparent',
-    borderWidth: 1,
     padding: 0,
-    fontSize: 14,
-  },
-  view: {
-    marginTop: 30,
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
 });
 export default CustomForm;

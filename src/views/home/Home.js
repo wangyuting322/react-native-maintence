@@ -7,6 +7,9 @@
  */
 
 import React from 'react';
+// 全局样式
+import {globalColor, globalSize} from '../../assets/styles/Global';
+// 组件
 import {
   StyleSheet,
   Text,
@@ -56,12 +59,7 @@ function Home({route, navigation}) {
    */
   function renderTabBarLabel({focused, color, size}, label) {
     return (
-      <Text
-        style={
-          focused
-            ? {...styles.activeColor, fontSize: 14}
-            : {...styles.normalColor, fontSize: 14}
-        }>
+      <Text style={focused ? styles.focusedText : styles.normalText}>
         {label}
       </Text>
     );
@@ -74,12 +72,7 @@ function Home({route, navigation}) {
     return (
       <Icon
         name={icon}
-        style={{fontSzie: 16}}
-        style={
-          focused
-            ? {...styles.activeColor, fontSize: 24}
-            : {...styles.normalColor, fontSize: 24}
-        }
+        style={focused ? styles.focusedIcon : styles.normalIcon}
         type="FontAwesome"></Icon>
     );
   }
@@ -109,11 +102,21 @@ function Home({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
-  activeColor: {
-    color: '#3F51B5',
+  focusedText: {
+    ...globalColor.themeColor,
+    ...globalSize.textSize,
   },
-  normalColor: {
-    color: '#000',
+  normalText: {
+    ...globalColor.normalColor,
+    ...globalSize.textSize,
+  },
+  focusedIcon: {
+    ...globalColor.themeColor,
+    ...globalSize.iconSize,
+  },
+  normalIcon: {
+    ...globalColor.normalColor,
+    ...globalSize.iconSize,
   },
 });
 export default Home;

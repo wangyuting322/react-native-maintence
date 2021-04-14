@@ -11,6 +11,7 @@ import HomeScreen from '../views/home/Home.js';
 import AddFixedAssetsScreen from '../views/fixedAssets/AddFixedAssets.js';
 import AddMaintenanceScreen from '../views/fixedAssets/AddMaintenance.js';
 import ScanFixedAssetsScreen from '../views/fixedAssets/ScanFixedAssets.js';
+import AssetsCheckScreen from '../views/fixedAssets/AssetsCheck.js';
 import MyAssetsScreen from '../views/mine/MyAssets.js';
 export const Stack = createStackNavigator();
 /**
@@ -71,7 +72,7 @@ export const allStackNavigations = [
   //   component: MineScreen
   // },
   {
-    name: 'addFixedAssets',
+    name: 'AddFixedAssets',
     options: {
       headerTitle: '新增资产',
       headerShown: true,
@@ -79,7 +80,7 @@ export const allStackNavigations = [
     component: AddFixedAssetsScreen,
   },
   {
-    name: 'addMaintenance',
+    name: 'AddMaintenance',
     options: {
       headerTitle: '新增维保',
       headerShown: true,
@@ -87,7 +88,7 @@ export const allStackNavigations = [
     component: AddMaintenanceScreen,
   },
   {
-    name: 'scanFixedAssets',
+    name: 'ScanFixedAssets',
     options: {
       headerTitle: '识别资产',
       headerShown: true,
@@ -95,7 +96,15 @@ export const allStackNavigations = [
     component: ScanFixedAssetsScreen,
   },
   {
-    name: 'myAssets',
+    name: 'AssetsCheck',
+    options: {
+      headerTitle: '资产盘点',
+      headerShown: true,
+    },
+    component: AssetsCheckScreen,
+  },
+  {
+    name: 'MyAssets',
     options: {
       headerTitle: '我的资产',
       headerShown: true,
