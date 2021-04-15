@@ -119,7 +119,7 @@ function Navigation(args) {
       ref={navigatorRef => {
         navigator = navigatorRef;
       }}>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Home">
         {allStackNavigations.map((item, index) => {
           return (
             <Stack.Screen

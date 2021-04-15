@@ -29,6 +29,8 @@ import {
   Toast,
   Root,
 } from 'native-base';
+// 接口
+import axios from 'axios';
 
 function Login({route, navigation}) {
   let [loginName, setLoginName] = useState('');
@@ -48,28 +50,35 @@ function Login({route, navigation}) {
     setPassword(text);
   }
   /**
-   * 显示toast
-   */
-  function showToast(message) {
-    setMessage(message);
-    setVisibleToast(true);
-  }
-  /**
    * 登录按钮的点击事件
    */
   function handleLogin() {
-    if (loginName === 'admin' && password === '12345') {
-      navigation.navigate('Home', {initialRouteName: 'FixedAssets'});
-    } else {
-      Toast.show({
-        text: '账号或密码错误',
-        textStyle: {textAlign: 'center'},
-        // buttonText: '确定',
-        position: 'top',
-        type: 'warning',
-        duration: 2000,
+    axios({
+      url: 'http://121.40.228.54:8083/system/login',
+      method: 'POST',
+      data: {
+        username: loginName,
+        password: password,
+      },
+    })
+      .then(({data: res}) => {
+        console.log(res);
+        if (res.code == 200) {
+          navigation.navigate('Home', {initialRouteName: 'FixedAssets'});
+        } else {
+          Toast.show({
+            text: res.message,
+            textStyle: {textAlign: 'center'},
+            // buttonText: '确定',
+            position: 'top',
+            type: 'warning',
+            duration: 2000,
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
       });
-    }
   }
 
   return (

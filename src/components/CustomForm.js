@@ -131,10 +131,15 @@ function CustomForm(props) {
   function renderTimePicker(field, item) {
     return (
       <CustomDateTime
-        value={new Date(1598051730000)}
+        value={
+          !item.value || !!(new Date(item.value).toString() == 'Invalid Date')
+            ? new Date()
+            : new Date(item.value)
+        }
         mode={item.mode || 'date'}
         onChangeTime={$event => {
-          $event, field, item.field;
+          console.log($event);
+          changeField($event, field, item.field);
         }}></CustomDateTime>
     );
   }

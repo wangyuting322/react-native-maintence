@@ -31,7 +31,7 @@ function AddMaintenance({route, navigation}) {
           field: 'debentureDate',
           value: null,
           renderType: 'timePicker',
-          mode: 'date',
+          mode: 'time',
         },
         {
           title: '维保状态',
