@@ -31,12 +31,12 @@ import {
 } from 'native-base';
 // 接口
 import axios from 'axios';
+import {setToken, getToken} from '../../utils/Storage';
 
 function Login({route, navigation}) {
   let [loginName, setLoginName] = useState('');
   let [password, setPassword] = useState('');
-  let [visibleToast, setVisibleToast] = useState(false);
-  let [message, setMessage] = useState('');
+
   /**
    * 修改账号
    */
@@ -61,9 +61,15 @@ function Login({route, navigation}) {
         password: password,
       },
     })
-      .then(({data: res}) => {
+      .then(async ({data: res}) => {
         console.log(res);
         if (res.code == 200) {
+          let token = res.data;
+          // 存token
+          setToken(token);
+          // 取token
+          let myToken = await getToken(token);
+          // 跳转路由
           navigation.navigate('Home', {initialRouteName: 'FixedAssets'});
         } else {
           Toast.show({

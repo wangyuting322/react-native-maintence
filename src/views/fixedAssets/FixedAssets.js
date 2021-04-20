@@ -83,6 +83,11 @@ function FixedAssets({navigation}) {
           icon: 'clone',
           title: '备件',
         },
+        {
+          icon: 'clone',
+          title: '部门',
+          link: 'Department',
+        },
       ],
     },
     {

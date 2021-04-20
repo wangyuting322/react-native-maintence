@@ -11,6 +11,7 @@ import HomeScreen from '../views/home/Home.js';
 import AddFixedAssetsScreen from '../views/fixedAssets/AddFixedAssets.js';
 import AddMaintenanceScreen from '../views/fixedAssets/AddMaintenance.js';
 import ScanFixedAssetsScreen from '../views/fixedAssets/ScanFixedAssets.js';
+import DepartmentScreen from '../views/fixedAssets/Department.js';
 import AssetsCheckScreen from '../views/fixedAssets/AssetsCheck.js';
 import MyAssetsScreen from '../views/mine/MyAssets.js';
 export const Stack = createStackNavigator();
@@ -104,6 +105,14 @@ export const allStackNavigations = [
     component: AssetsCheckScreen,
   },
   {
+    name: 'Department',
+    options: {
+      headerTitle: '部门查询',
+      headerShown: true,
+    },
+    component: DepartmentScreen,
+  },
+  {
     name: 'MyAssets',
     options: {
       headerTitle: '我的资产',
@@ -119,7 +128,7 @@ function Navigation(args) {
       ref={navigatorRef => {
         navigator = navigatorRef;
       }}>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
         {allStackNavigations.map((item, index) => {
           return (
             <Stack.Screen

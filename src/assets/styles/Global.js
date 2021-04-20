@@ -36,6 +36,9 @@ export const globalSize = StyleSheet.create({
   iconSize: {
     fontSize: 20,
   },
+  largeIconSize: {
+    fontSize: 30,
+  },
 });
 
 export const globalFlexStyle = StyleSheet.create({

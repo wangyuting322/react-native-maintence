@@ -52,7 +52,7 @@ function ScanFixedAssets({route, navigation}) {
       if (e) {
         // data -条码的文本表示形式（如果有）| rawData -条形码中编码的原始数据（如果有） | type -检测到的条形码的类型
         let {type, data, rawData, target, bounds} = {...e};
-        Vibration.vibrate([0, 500], false);
+        Vibration.vibrate(500);
         Alert.alert(
           '扫描成功',
           `扫描结果：
@@ -109,6 +109,14 @@ function ScanFixedAssets({route, navigation}) {
   function handleBig(isBig) {
     setIsBig(isBig);
   }
+  /**
+   * 震动
+   */
+  function handleVibration(e) {
+    console.log(e);
+    Vibration.vibrate(400, false);
+    console.log(Vibration.vibrate());
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -155,6 +163,9 @@ function ScanFixedAssets({route, navigation}) {
         </Button>
         <Button onPress={switchCamera}>
           <Text style={{fontSize: 14}}> 转换摄像头 </Text>
+        </Button>
+        <Button onPress={handleVibration}>
+          <Text style={{fontSize: 14}}> 震动 </Text>
         </Button>
       </View>
       {imagePath ? (
