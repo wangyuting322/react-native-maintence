@@ -54,7 +54,7 @@ function Login({route, navigation}) {
    */
   function handleLogin() {
     axios({
-      url: 'http://121.40.228.54:8083/system/login',
+      url: 'http://不能告诉你:8083/system/login',
       method: 'POST',
       data: {
         username: loginName,
@@ -62,7 +62,6 @@ function Login({route, navigation}) {
       },
     })
       .then(async ({data: res}) => {
-        console.log(res);
         if (res.code == 200) {
           let token = res.data;
           // 存token

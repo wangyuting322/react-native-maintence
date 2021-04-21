@@ -33,9 +33,8 @@ import {getToken} from '../../utils/Storage';
 import axios from 'axios';
 
 function Department() {
-  let [search, setSearch] = useState('');
+  let [search, setSearch] = useState({deptName: ''});
   let flat = useRef(null);
-  let [fabActive, setFabActive] = useState(false);
   let [refresh, setRefresh] = useState(false);
   let [deptList, setDeptList] = useState([]);
   let [current, setCurrent] = useState(1);
@@ -46,21 +45,20 @@ function Department() {
    * 获取搜索框中的字
    */
   function updateSearch(search) {
-    console.log(search);
-    setSearch(search);
+    setSearch({deptName: search});
   }
   /**
    * 修改带搜索的部门名称
    */
   function changeDeptName() {
-    setDeptName(search);
+    setDeptName(search.deptName);
   }
   /**
    * 获取部门列表信息
    */
   function getDeptList(myToken) {
     return axios({
-      url: 'http://121.40.228.54:8083/system/dept/list',
+      url: 'http://不能告诉你:8083/system/dept/list',
       method: 'GET',
       params: {
         current: 1,
@@ -94,7 +92,6 @@ function Department() {
    * 滚动区域回到顶部
    */
   function toTop() {
-    console.log(flat);
     flat.current.scrollToOffset({offset: 0});
   }
   /**
@@ -189,7 +186,6 @@ function Department() {
         //   )
         // }
         progressViewOffset={50}
-        // scrollToEnd={handleBottom}
       />
       {/**工具栏 */}
       <Fab

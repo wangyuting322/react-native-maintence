@@ -21,6 +21,8 @@ import {
   Vibration,
   Alert,
   Modal,
+  PermissionsAndroid,
+  Platform,
 } from 'react-native';
 // import {navigate} from '../../navigation/index';
 import {Text, View, Button} from 'native-base';
@@ -112,7 +114,20 @@ function ScanFixedAssets({route, navigation}) {
   /**
    * 震动
    */
-  function handleVibration(e) {
+  async function handleVibration(e) {
+    try {
+      if (Platform.OS === 'android') {
+        // 这里写的都是已进入软件就要获取的权限
+        console.log(PermissionsAndroid.PERMISSIONS);
+        // const granted = await PermissionsAndroid.request(
+        //   PermissionsAndroid.PERMISSIONS.VIBRATE,
+        // );
+        // console.log(granted);
+      }
+    } catch (err) {
+      // alert("err",err);
+      console.warn(err, '错误警告');
+    }
     console.log(e);
     Vibration.vibrate(400, false);
     console.log(Vibration.vibrate());

@@ -79,9 +79,10 @@ function Mine({route, navigation}) {
    */
   function renderContentItem(data) {
     return data.map(({title, icon, link}, index) => {
-      console.log(`#${Math.random() * 10000}`);
+      // console.log(`#${Math.random() * 10000}`);
       return (
         <ListItem
+          key={`${icon}-${index}`}
           icon
           onPress={() => handleLink(link)}
           style={styles.contentItem}>
@@ -125,7 +126,7 @@ function Mine({route, navigation}) {
       <List>
         {DATA.map(({title, data}, index) => {
           return (
-            <View>
+            <View key={index}>
               <ListItem key={index} itemDivider></ListItem>
               {renderContentItem(data)}
             </View>

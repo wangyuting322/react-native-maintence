@@ -159,6 +159,7 @@ function FixedAssets({navigation}) {
         {content.map((item, index) => {
           return (
             <TouchableHighlight
+              key={`${item.icon}-${index}`}
               style={styles.contentItem}
               underlayColor={globalColor.shadowColor.backgroundColor}
               onPress={() => handleLink(item)}>
@@ -181,7 +182,7 @@ function FixedAssets({navigation}) {
       <List>
         {DATA.map(({title, data}, index) => {
           return (
-            <View>
+            <View key={`${title}-${index}`}>
               <ListItem key={`${title}-${index}`}>
                 <View style={styles.title}>
                   <View style={styles.before}></View>
