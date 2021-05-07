@@ -27,6 +27,12 @@ export default function CustomImage(props) {
     value: imageArr = [],
     // 选择器类型，可选值： 'single' 单选 |'multiple' 多选
     mode = 'multiple',
+    // 是否可编辑图片（删除，上传功能）
+    isEditable = true,
+    // 自定义已上传的Image图片样式
+    customImageContentStyles = {},
+    // 自定义上传图片图标Text的样式
+    customUploadImageStyles = {},
   } = {...props};
   // 是否放大图片
   let [isBig, setIsBig] = useState(false);
@@ -131,12 +137,14 @@ export default function CustomImage(props) {
       <View style={styles.imageWrapper}>
         {imageArr.map((item, index) => {
           return (
-            <View style={styles.imageView}>
-              <Text
-                style={styles.deleteImage}
-                onPress={() => deleteImage(index)}>
-                X
-              </Text>
+            <View style={styles.imageView} key={index}>
+              {isEditable ? (
+                <Text
+                  style={styles.deleteImage}
+                  onPress={() => deleteImage(index)}>
+                  X
+                </Text>
+              ) : null}
               <TouchableHighlight
                 activeOpacity={1}
                 underlayColor={globalColor.shadowColor.backgroundColor}
@@ -145,14 +153,21 @@ export default function CustomImage(props) {
                   source={{
                     uri: item.uri,
                   }}
-                  style={styles.imageContent}></Image>
+                  style={{
+                    ...styles.imageContent,
+                    ...customImageContentStyles,
+                  }}></Image>
               </TouchableHighlight>
             </View>
           );
         })}
-        <Text onPress={selectPicture} style={styles.uploadImage}>
-          +
-        </Text>
+        {isEditable ? (
+          <Text
+            onPress={selectPicture}
+            style={{...styles.uploadImage, ...customUploadImageStyles}}>
+            +
+          </Text>
+        ) : null}
       </View>
     </View>
   );

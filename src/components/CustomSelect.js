@@ -62,7 +62,7 @@ export default function CustomSelect(props) {
     }
     return options.map((item, index) => {
       return (
-        <ListItem style={{width: 250}}>
+        <ListItem style={{width: 250}} key={index}>
           <Left>
             <Text style={styles.leftText}>{renderView(item)}</Text>
           </Left>
